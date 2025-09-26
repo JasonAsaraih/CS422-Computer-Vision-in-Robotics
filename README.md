@@ -7,6 +7,8 @@
 - **Week 4 (October 6, 2025)**  
   We will be recognizing the blue and red game elements pulled from a camera stream.  
   We will pull their approximate location.
+  *I think we could use edge/color detection and a CNN for the field elements - need to gather dataset (could generate data)*
+  *For the long goals we could just train a CNN*
 
 - **Week 6 (October 20, 2025)**  
   We will be recognizing all the blue and red game elements in the frame, limited to what is below the top of the wall.  
