@@ -1,23 +1,73 @@
-# CS422-Computer-Vision-in-Robotics
-# Project Timeline
+# Robot & Game-Piece Detection System  
+### **Hybrid Computer Vision + Deep Learning Pipeline (YOLOv8 + HSV + Edge Clustering)**
 
-- **Week 2 (September 22, 2025)**  
-  By this week, we will have decided on the library(s) we will be using.
+This repository contains a complete system for detecting **colored balls**, **robot edges**, and **clutter objects** in a robotics-competition environment. It combines:
 
-- **Week 4 (October 6, 2025)**  
-  We will be recognizing the blue and red game elements pulled from a camera stream.  
-  We will pull their approximate location.
-  *I think we could use edge/color detection and a CNN for the field elements - need to gather dataset (could generate data)*
-  *For the long goals we could just train a CNN*
+- **YOLOv8 deep-learning detection**
+- **HSV-based color segmentation**
+- **Canny + morphological edge clustering**
+- **Synthetic dataset generation for model training**
 
-- **Week 6 (October 20, 2025)**  
-  We will be recognizing all the blue and red game elements in the frame, limited to what is below the top of the wall.  
-  We will not be recognizing differently sized or shaped elements that are not game elements, even if they are the same color.  
-  We will also be able to show the location of the game elements in relation to our robot.
+The project is designed to work with competition robots, where robots vary drastically in appearance and lighting is inconsistent.  
+This pipeline provides robust multi-stage detection with redundancy across modules.
 
-- **Week 8 (November 3, 2025)**  
-  We will have a rough detection of opponent robots.
+---
 
-- **Week 10 (November 17, 2025)**  
-  We will be able to accurately detect opponent robots and track their position.  
-  Everything will be integrated together.
+## Repository Overview
+
+This project includes **7 Python scripts**:
+
+### 1. `test.py` — YOLOv8 Inference Demo  
+Loads a trained YOLO model and runs inference on a test image.
+
+### 2. `train.py` — YOLOv8 Training Script  
+Trains YOLOv8n on a dataset defined in `data.yaml`.
+
+### 3. `edge_detection.py` — Partial-Circle + Edge-Based Detection  
+Extracts edges, detects red/blue ball contours, and identifies clutter regions via contour clustering.
+
+### 4. `data_generator.py` — Synthetic YOLO Dataset Generator  
+Creates **automatically labeled, highly diverse synthetic training data** using random backgrounds, scale variation, occlusion, and augmentation.  
+Outputs YOLO `.jpg` + `.txt` pairs.
+
+### 5. `color_detection.py` — HSV Color-Based Detection  
+Detects red and blue objects using dual-range red masking and contour filtering.
+
+### 6. `Integration.py` — Full Combined Pipeline  
+Integrates:  
+✔ YOLOv8 detections  
+✔ HSV detections  
+✔ Edge suppression inside detected boxes  
+✔ Edge clustering for clutter detection  
+Outputs a complete annotated result image.
+
+### 7. `main.py` — Template Program  
+Example starter file from the IDE; included for completeness.
+
+---
+
+## Features
+
+### ** Deep Learning (YOLOv8)**  
+- Trained using custom synthetic dataset  
+- Robust detection under varied conditions  
+- Fast inference
+
+### ** Classical Computer Vision**  
+- HSV segmentation for red/blue  
+- Canny-based edge extraction  
+- Contour-based circle/partial-circle detection  
+- Morphological clutter clustering
+
+### ** Hybrid Multi-Stage Filtering**  
+Each component improves the others:  
+- YOLO + HSV boxes **suppress edges** inside them  
+- Remaining edges identify robot/clutter  
+- Geometric checks filter false positives
+
+### ** Synthetic Dataset Pipeline**  
+- Auto-generated labeled training images  
+- Scalable to thousands of samples  
+- Supports occlusions, random placement, augmentation  
+- YOLO-format labels generated automatically
+
